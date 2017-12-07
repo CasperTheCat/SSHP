@@ -24,7 +24,7 @@ def convToInts(a):
 def main():
     """Class"""
 
-    if(sys.argv[6] != "MAX" and sys.argv[6] != "AVG"):
+    if(sys.argv[6] != "MAX" and sys.argv[6] != "AVG" and sys.argv[6] != "MIN"):
         print("only MAX and AVG modes")
         sys.exit()
 
@@ -52,6 +52,7 @@ def main():
     bucketsError = np.zeros(shape=(bucketCounty, bucketCountx))
     bucketsCount = np.zeros(shape=(bucketCounty, bucketCountx))
     bucketsMaxMAE = np.zeros(shape=(bucketCounty, bucketCountx))
+    bucketsMinMAE = np.ones(shape=(bucketCounty, bucketCountx)) * 1000
 
     # Remapping
     yvals=data[:,0]
@@ -67,7 +68,7 @@ def main():
 
     # Forward Declaration of MAE Max and Min = 0
     max_mae = 0
-    min_mae = 0 # Change if needs be
+    min_mae = 100 # Change if needs be
 
     # Forward Declaration of 
 
@@ -83,6 +84,9 @@ def main():
 
         if(MAE > bucketsMaxMAE[buckety][bucketx]):
             bucketsMaxMAE[buckety][bucketx] = MAE
+
+        if(MAE < bucketsMinMAE[buckety][bucketx]):
+            bucketsMinMAE[buckety][bucketx] = MAE
 
         if(MAE > max_mae):
             max_mae = MAE;
@@ -107,9 +111,13 @@ def main():
             else:
                 if(sys.argv[6] == "AVG"):
                     MAE = bucketsError[ly][lx] / bucketsCount[ly][lx]
-                else:
+                elif(sys.argv[6] == "MAX"):
                     MAE = bucketsMaxMAE[ly][lx]
-                mappedMAE = remap(MAE, min_mae, max_mae, 0, 2)
+                else:
+                    MAE = bucketsMinMAE[ly][lx]
+
+                #mappedMAE = remap(MAE, min_mae, max_mae, 0, 2)
+                mappedMAE = remap(MAE, 0, max_mae, 0, 2)
             
                 # Lerp between colours
                 if(mappedMAE < 1):

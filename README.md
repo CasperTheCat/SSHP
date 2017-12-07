@@ -73,4 +73,4 @@ This generates a heatmap using bins.
 ```bash
 python GenerateHeatmap.py <in.csv> <heatmapName> <bucketSize> <nBucketsX> <nBucketsY> <mode>
 ```
-where valid modes are MAX and AVG
+where valid modes are MAX, AVG and MIN
