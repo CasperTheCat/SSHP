@@ -103,16 +103,19 @@ def main():
         for lx in range(0, bucketCountx):
             # calc MAE and remap it
             if(bucketsCount[ly][lx] == 0):
-                bucketColour = (20,20,220)
+                bucketColour = (35,35,35)
             else:
                 if(sys.argv[6] == "AVG"):
                     MAE = bucketsError[ly][lx] / bucketsCount[ly][lx]
                 else:
                     MAE = bucketsMaxMAE[ly][lx]
-                mappedMAE = remap(MAE, min_mae, max_mae, 0, 1)
+                mappedMAE = remap(MAE, min_mae, max_mae, 0, 2)
             
                 # Lerp between colours
-                bucketColour = lerp((10,255,10),(255,10,10),mappedMAE)
+                if(mappedMAE < 1):
+                    bucketColour = lerp((10,10,255),(10,255,10),mappedMAE)
+                else:
+                    bucketColour = lerp((10,255,10),(255,10,10),(mappedMAE - 1))
 
             # Colour the bucket
             for suby in range(0, bucketSize):
