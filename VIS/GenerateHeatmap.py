@@ -3,6 +3,10 @@ import os
 from PIL import Image #Image for writing
 import numpy as np #Processing
 import math
+import plotly.plotly as py
+import plotly
+import plotly.graph_objs as go
+
 
 def remap(value, low1, high1, low2, high2):
     return low2 + (value - low1) * (high2 - low2) / (high1 - low1)
@@ -52,7 +56,7 @@ def main():
     bucketsError = np.zeros(shape=(bucketCounty, bucketCountx))
     bucketsCount = np.zeros(shape=(bucketCounty, bucketCountx))
     bucketsMaxMAE = np.zeros(shape=(bucketCounty, bucketCountx))
-    bucketsMinMAE = np.ones(shape=(bucketCounty, bucketCountx)) * 1000
+    bucketsMinMAE = np.ones(shape=(bucketCounty, bucketCountx)) * 100
 
     # Remapping
     yvals=data[:,0]
@@ -83,10 +87,10 @@ def main():
         MAE = abs(s[3] - s[2])
 
         if(MAE > bucketsMaxMAE[buckety][bucketx]):
-            bucketsMaxMAE[buckety][bucketx] = MAE
+            bucketsMaxMAE[buckety][bucketx] = MAE;
 
         if(MAE < bucketsMinMAE[buckety][bucketx]):
-            bucketsMinMAE[buckety][bucketx] = MAE
+            bucketsMinMAE[buckety][bucketx] = MAE;
 
         if(MAE > max_mae):
             max_mae = MAE;
@@ -103,34 +107,106 @@ def main():
     
 
     # Projection slice along Y into XZ space (Conventionally XY)
+#    for ly in range(0, bucketCounty):
+#        for lx in range(0, bucketCountx):
+#            # calc MAE and remap it
+#            if(bucketsCount[ly][lx] == 0):
+#                bucketColour = (35,35,35)
+#            else:
+#                if(sys.argv[6] == "AVG"):
+#                    MAE = bucketsError[ly][lx] / bucketsCount[ly][lx]
+#                elif(sys.argv[6] == "MAX"):
+#                    MAE = bucketsMaxMAE[ly][lx]
+#                else:
+#                    MAE = bucketsMinMAE[ly][lx]
+#
+#                #mappedMAE = remap(MAE, min_mae, max_mae, 0, 2)
+#                mappedMAE = remap(MAE, 0, max_mae, 0, 2)
+#            
+#                # Lerp between colours
+#                if(mappedMAE < 1):
+#                    bucketColour = lerp((10,10,255),(10,255,10),mappedMAE)
+#                else:
+#                    bucketColour = lerp((10,255,10),(255,10,10),(mappedMAE - 1))
+#
+#            # Colour the bucket
+#            for suby in range(0, bucketSize):
+#                for subx in range(0, bucketSize):
+#                    pixels[lx * bucketSize + subx, (imageBoundsY-1) - (ly * bucketSize + suby)] = convToInts(bucketColour)
+#
+#    outImage.save("heatmap_" + sys.argv[2] + ".TIFF")
+
     for ly in range(0, bucketCounty):
         for lx in range(0, bucketCountx):
-            # calc MAE and remap it
+            # Preproc AVG
             if(bucketsCount[ly][lx] == 0):
-                bucketColour = (35,35,35)
-            else:
-                if(sys.argv[6] == "AVG"):
-                    MAE = bucketsError[ly][lx] / bucketsCount[ly][lx]
-                elif(sys.argv[6] == "MAX"):
-                    MAE = bucketsMaxMAE[ly][lx]
-                else:
-                    MAE = bucketsMinMAE[ly][lx]
+                bucketsCount[ly][lx] = 1
+            # Preproc MAX
+            # Preproc MIN
+            if(bucketsMinMAE[ly][lx] == 100):
+                bucketsMinMAE[ly][lx] = 0
 
-                #mappedMAE = remap(MAE, min_mae, max_mae, 0, 2)
-                mappedMAE = remap(MAE, 0, max_mae, 0, 2)
-            
-                # Lerp between colours
-                if(mappedMAE < 1):
-                    bucketColour = lerp((10,10,255),(10,255,10),mappedMAE)
-                else:
-                    bucketColour = lerp((10,255,10),(255,10,10),(mappedMAE - 1))
+    if(sys.argv[6] == "AVG"):
+        plotData = bucketsError / bucketsCount
+        plotly.offline.plot([{
+            'z': plotData,
+            'type': 'heatmap',
+            'colorscale': [
+                #Invalids
+                [0, 'rgb(35,35,35)'],
+                #[0.00001, 'rgb(20,20,20)'],
 
-            # Colour the bucket
-            for suby in range(0, bucketSize):
-                for subx in range(0, bucketSize):
-                    pixels[lx * bucketSize + subx, (imageBoundsY-1) - (ly * bucketSize + suby)] = convToInts(bucketColour)
+                [1e-20, 'rgb(10,10,255)'],
+                [0.5, 'rgb(10,255,10)'],
+                [0.5, 'rgb(10,255,10)'],
+                [1, 'rgb(255,10,10)']
+            ],
+            'colorbar': {
+                'tick0': 0,
+                'dtick': 1
+            }}],
+            filename='heatmap-' + sys.argv[2] + '-avg')
 
-    outImage.save("heatmap_" + sys.argv[2] + ".JPEG")
+    elif(sys.argv[6] == "MAX"):
+        plotData = bucketsMaxMAE
+        plotly.offline.plot([{
+            'z': plotData,
+            'type': 'heatmap',
+            'colorscale': [
+                #Invalids
+                [0, 'rgb(35,35,35)'],
+                #[0.0001, 'rgb(20,20,20)'],
+
+                [1e-20, 'rgb(10,10,255)'],
+                [0.5, 'rgb(10,255,10)'],
+                [0.5, 'rgb(10,255,10)'],
+                [1, 'rgb(255,10,10)']
+            ],
+            'colorbar': {
+                'tick0': 0,
+                'dtick': 1
+            }}],
+            filename='heatmap-' + sys.argv[2] + '-max')        
+    else:
+        plotData = bucketsMinMAE
+        plotly.offline.plot([{
+            'z': plotData,
+            'type': 'heatmap',
+            'colorscale': [
+                #Invalids
+                [0, 'rgb(35,35,35)'],
+                #[0.00001, 'rgb(20,20,20)'],
+                [1e-20, 'rgb(10,10,255)'],
+                [0.5, 'rgb(10,255,10)'],
+                [0.5, 'rgb(10,255,10)'],
+                [1, 'rgb(255,10,10)']
+            ],
+            'colorbar': {
+                'tick0': 0,
+                'dtick': 1
+            }}],
+            filename='heatmap-' + sys.argv[2] + '-min')
+
 
 if __name__ == '__main__':
     main()
