@@ -148,64 +148,88 @@ def main():
 
     if(sys.argv[6] == "AVG"):
         plotData = bucketsError / bucketsCount
-        plotly.offline.plot([{
-            'z': plotData,
-            'type': 'heatmap',
-            'colorscale': [
-                #Invalids
-                [0, 'rgb(35,35,35)'],
-                #[0.00001, 'rgb(20,20,20)'],
+        plotly.offline.plot({
+            "data": [
+                go.Heatmap(
+                    z=plotData,
+                    colorscale=[
+                        [0, 'rgb(35,35,35)'],
+                        [1e-20, 'rgb(10,10,255)'],
+                        [0.5, 'rgb(10,255,10)'],
+                        [0.5, 'rgb(10,255,10)'],
+                        [1, 'rgb(255,10,10)']
+                    ]),
+                ],
+            "layout": go.Layout(
+                title="Average MAE (m/s) at " + sys.argv[2] + " meters",
+                xaxis=dict(title='Binned Distance from Origin in Y'),
+                yaxis=dict(title='Binned Distance from Origin in Z')
+            )
+        },
+        filename='heatmap-' + sys.argv[2] + '-avg.html')
 
-                [1e-20, 'rgb(10,10,255)'],
-                [0.5, 'rgb(10,255,10)'],
-                [0.5, 'rgb(10,255,10)'],
-                [1, 'rgb(255,10,10)']
-            ],
-            'colorbar': {
-                'tick0': 0,
-                'dtick': 1
-            }}],
-            filename='heatmap-' + sys.argv[2] + '-avg')
+        #plotly.offline.plot({"data":[{
+        #    'z': plotData,
+        #    'type': 'heatmap',
+        #    'colorscale': [
+        #        #Invalids
+        #        [0, 'rgb(35,35,35)'],
+        #        #[0.00001, 'rgb(20,20,20)'],
+#
+        #        [1e-20, 'rgb(10,10,255)'],
+        #        [0.5, 'rgb(10,255,10)'],
+        #        [0.5, 'rgb(10,255,10)'],
+        #        [1, 'rgb(255,10,10)']
+        #    ],
+        #    'colorbar': {
+        #        'tick0': 0,
+        #        'dtick': 1
+        #    }}],
+        #    "layout": Layout(title="Hello"),
+        #    filename='heatmap-' + sys.argv[2] + '-avg')
 
     elif(sys.argv[6] == "MAX"):
         plotData = bucketsMaxMAE
-        plotly.offline.plot([{
-            'z': plotData,
-            'type': 'heatmap',
-            'colorscale': [
-                #Invalids
-                [0, 'rgb(35,35,35)'],
-                #[0.0001, 'rgb(20,20,20)'],
-
-                [1e-20, 'rgb(10,10,255)'],
-                [0.5, 'rgb(10,255,10)'],
-                [0.5, 'rgb(10,255,10)'],
-                [1, 'rgb(255,10,10)']
-            ],
-            'colorbar': {
-                'tick0': 0,
-                'dtick': 1
-            }}],
-            filename='heatmap-' + sys.argv[2] + '-max')        
+        plotly.offline.plot({
+            "data": [
+                go.Heatmap(
+                    z=plotData,
+                    colorscale=[
+                        [0, 'rgb(35,35,35)'],
+                        [1e-20, 'rgb(10,10,255)'],
+                        [0.5, 'rgb(10,255,10)'],
+                        [0.5, 'rgb(10,255,10)'],
+                        [1, 'rgb(255,10,10)']
+                    ]),
+                ],
+            "layout": go.Layout(
+                title="Maximum MAE (m/s) at " + sys.argv[2] + " meters",
+                xaxis=dict(title='X'),
+                yaxis=dict(title='Y')
+            )
+        },
+        filename='heatmap-' + sys.argv[2] + '-max.html')   
     else:
         plotData = bucketsMinMAE
-        plotly.offline.plot([{
-            'z': plotData,
-            'type': 'heatmap',
-            'colorscale': [
-                #Invalids
-                [0, 'rgb(35,35,35)'],
-                #[0.00001, 'rgb(20,20,20)'],
-                [1e-20, 'rgb(10,10,255)'],
-                [0.5, 'rgb(10,255,10)'],
-                [0.5, 'rgb(10,255,10)'],
-                [1, 'rgb(255,10,10)']
-            ],
-            'colorbar': {
-                'tick0': 0,
-                'dtick': 1
-            }}],
-            filename='heatmap-' + sys.argv[2] + '-min')
+        plotly.offline.plot({
+            "data": [
+                go.Heatmap(
+                    z=plotData,
+                    colorscale=[
+                        [0, 'rgb(35,35,35)'],
+                        [1e-20, 'rgb(10,10,255)'],
+                        [0.5, 'rgb(10,255,10)'],
+                        [0.5, 'rgb(10,255,10)'],
+                        [1, 'rgb(255,10,10)']
+                    ]),
+                ],
+            "layout": go.Layout(
+                title="Minimum MAE (m/s) at " + sys.argv[2] + " meters",
+                xaxis=dict(title='X'),
+                yaxis=dict(title='Y')
+            )
+        },
+        filename='heatmap-' + sys.argv[2] + '-min.html')
 
 
 if __name__ == '__main__':
