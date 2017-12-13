@@ -203,9 +203,9 @@ def main():
                     ]),
                 ],
             "layout": go.Layout(
-                title="Maximum MAE (m/s) at " + sys.argv[2] + " meters",
-                xaxis=dict(title='X'),
-                yaxis=dict(title='Y')
+                title="Average MAE (m/s) at " + sys.argv[2] + " meters",
+                xaxis=dict(title='Binned Distance from Origin in Y'),
+                yaxis=dict(title='Binned Distance from Origin in Z')
             )
         },
         filename='heatmap-' + sys.argv[2] + '-max.html')   
@@ -224,9 +224,9 @@ def main():
                     ]),
                 ],
             "layout": go.Layout(
-                title="Minimum MAE (m/s) at " + sys.argv[2] + " meters",
-                xaxis=dict(title='X'),
-                yaxis=dict(title='Y')
+                title="Average MAE (m/s) at " + sys.argv[2] + " meters",
+                xaxis=dict(title='Binned Distance from Origin in Y'),
+                yaxis=dict(title='Binned Distance from Origin in Z')
             )
         },
         filename='heatmap-' + sys.argv[2] + '-min.html')
