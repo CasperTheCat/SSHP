@@ -102,40 +102,6 @@ def main():
         bucketsCount[buckety][bucketx] += 1
         
 
-    print(max_mae)
-    print(min_mae)
-    
-
-    # Projection slice along Y into XZ space (Conventionally XY)
-#    for ly in range(0, bucketCounty):
-#        for lx in range(0, bucketCountx):
-#            # calc MAE and remap it
-#            if(bucketsCount[ly][lx] == 0):
-#                bucketColour = (35,35,35)
-#            else:
-#                if(sys.argv[6] == "AVG"):
-#                    MAE = bucketsError[ly][lx] / bucketsCount[ly][lx]
-#                elif(sys.argv[6] == "MAX"):
-#                    MAE = bucketsMaxMAE[ly][lx]
-#                else:
-#                    MAE = bucketsMinMAE[ly][lx]
-#
-#                #mappedMAE = remap(MAE, min_mae, max_mae, 0, 2)
-#                mappedMAE = remap(MAE, 0, max_mae, 0, 2)
-#            
-#                # Lerp between colours
-#                if(mappedMAE < 1):
-#                    bucketColour = lerp((10,10,255),(10,255,10),mappedMAE)
-#                else:
-#                    bucketColour = lerp((10,255,10),(255,10,10),(mappedMAE - 1))
-#
-#            # Colour the bucket
-#            for suby in range(0, bucketSize):
-#                for subx in range(0, bucketSize):
-#                    pixels[lx * bucketSize + subx, (imageBoundsY-1) - (ly * bucketSize + suby)] = convToInts(bucketColour)
-#
-#    outImage.save("heatmap_" + sys.argv[2] + ".TIFF")
-
     for ly in range(0, bucketCounty):
         for lx in range(0, bucketCountx):
             # Preproc AVG
@@ -166,26 +132,6 @@ def main():
             )
         },
         filename='heatmap-' + sys.argv[2] + '-avg.html')
-
-        #plotly.offline.plot({"data":[{
-        #    'z': plotData,
-        #    'type': 'heatmap',
-        #    'colorscale': [
-        #        #Invalids
-        #        [0, 'rgb(35,35,35)'],
-        #        #[0.00001, 'rgb(20,20,20)'],
-#
-        #        [1e-20, 'rgb(10,10,255)'],
-        #        [0.5, 'rgb(10,255,10)'],
-        #        [0.5, 'rgb(10,255,10)'],
-        #        [1, 'rgb(255,10,10)']
-        #    ],
-        #    'colorbar': {
-        #        'tick0': 0,
-        #        'dtick': 1
-        #    }}],
-        #    "layout": Layout(title="Hello"),
-        #    filename='heatmap-' + sys.argv[2] + '-avg')
 
     elif(sys.argv[6] == "MAX"):
         plotData = bucketsMaxMAE
