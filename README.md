@@ -63,6 +63,14 @@ Stitch actually does the append operation, taking two full CSVs and creating a C
 python Stitch.py <in1.csv> <in2.csv> <out.csv>
 ```
 
+### HalfCSV
+Cut the CSV in half and output both halves
+
+#### Usage
+```bash
+python HalfCSV.py <in1.csv> <out1.csv> <out2.csv>
+```
+
 ## Visualisation
 ---
 
