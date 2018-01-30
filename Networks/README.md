@@ -24,3 +24,11 @@ python renegade.py <10x15_model_directory> <10x20_model_directory> <15x20_model_
 
 This file was the other half of the Morte.py file. It takes the predicted sets from Revenant.py and predicts using them.
 
+## Nouveau.py
+```bash
+python nouveau.py <train.csv> <validation.csv> <predict10.csv> <predict20.csv> <predict30.csv> <predict40.csv> <predict50.csv> <predict60.csv> <predict66.csv>
+```
+
+*This file is deprecated*
+
+This file uses the DNN Regressor to train and predict a network. This file was deprecated as I was unable to get the export and import for the canned estimators working.
