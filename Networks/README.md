@@ -4,8 +4,9 @@
 ```bash
 python Morte.py <train.csv> <validation.csv> <predict1.csv> <predict10.csv> <predict20.csv> <predict30.csv> <predict40.csv> <predict50.csv> <predict60.csv> <predict66.csv>
 ```
+*This file is outdated compared to Revenant.py*
 
-This file is a lower level tensorflow feedforward network using relu activation
+This file is a lower level tensorflow feedforward network using relu activation.
 
 ## Revenant.py
 ```bash
