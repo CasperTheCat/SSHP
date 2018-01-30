@@ -11,7 +11,8 @@ def main():
     b = pd.read_csv(sys.argv[2], delimiter=',', skiprows=5,names=['Z', 'V'])
     b = b.drop('Z', 1)
     c = pd.DataFrame({'VI': []})
-    res = pd.concat([n,a,b,c], axis=1)
+    d = pd.DataFrame({'Theta': []})
+    res = pd.concat([n,a,b,c,d], axis=1)
     res = res.apply(pd.to_numeric, args=('coerce',))
     res = res[res.X != 0]
     res = res[res.Y != 0]
@@ -19,6 +20,7 @@ def main():
     res = res[res.V != 0]
     res['VI'] = 10
     res['X'] = sys.argv[3]
+    res['Theta'] = 0.0
 
     res = res.dropna(subset = ['X', 'Y', 'Z', 'V'])
     #res.head(100000).to_csv("output.csv", index = False)

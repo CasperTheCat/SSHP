@@ -37,7 +37,7 @@ def main():
         fileToLoad,
         delimiter=',',
         skip_header=1,
-        usecols=(1,2,3,5)
+        usecols=(1,2,3,6)
     )
 
     print("Generating heatmap_" + sys.argv[2] + ".JPEG")

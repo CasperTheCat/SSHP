@@ -6,8 +6,8 @@ import numpy as np #Processing
 
 def main():
     """Class"""
-    a = pd.read_csv(sys.argv[1], delimiter=',', skiprows=5,names=['X', 'Y','Z','V','VI'])
-    b = pd.read_csv(sys.argv[2], delimiter=',', skiprows=5,names=['VP'])
+    a = pd.read_csv(sys.argv[1], delimiter=',', skiprows=1,names=['X', 'Y','Z','V','VI','Theta'])
+    b = pd.read_csv(sys.argv[2], delimiter=',', skiprows=0,names=['VP'])
     res = pd.concat([a,b], axis=1)
     #res = res.apply(pd.to_numeric, args=('coerce',))
     #res['VI'] = 10
