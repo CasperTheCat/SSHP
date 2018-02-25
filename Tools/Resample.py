@@ -68,4 +68,4 @@ def resample(infilename,outfilename,num_bins_y,num_bins_z,max_bin_count):
 
 
 # Run the script
-resample(sys.argv[1],"dataset-resampled.csv",5000,5000,50000)
+resample(sys.argv[1],"dataset-resampled.csv",200,200,50)

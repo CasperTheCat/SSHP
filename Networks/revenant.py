@@ -21,6 +21,7 @@ MDL = sys.argv[3]
 TRAIN_SIZE=8192
 BATCH_SIZE=4096
 
+# From StackOverflow, this is a faster np.genfromtxt when the CSV is cleaned
 def iter_loadtxt(filename, delimiter=',', skiprows=0, dtype=float):
     def iter_func():
         with open(filename, 'r') as infile:
@@ -36,6 +37,7 @@ def iter_loadtxt(filename, delimiter=',', skiprows=0, dtype=float):
     data = data.reshape((-1, iter_loadtxt.rowlength))
     return data
 
+# Wrapper for iter_loadtxt
 def createXandY(load, target_column):
     train=iter_loadtxt(load,delimiter=',',skiprows=1)
     y_train_one = train[:,target_column]
@@ -50,6 +52,7 @@ def createXandY(load, target_column):
     y_train = np.reshape(y_train, (N, 1))
     return (x_train, y_train)
 
+# Special Wrapper for createXandY
 def createTrainAndVal(ltrain,lval):
     print("\nReading data...")
     train=iter_loadtxt(TRAINING,delimiter=',',skiprows=1)
@@ -86,9 +89,7 @@ def main():
     if not os.path.exists(TRAINING):
         sys.exit()
 
-    #res = pd.read_csv(TRAINING, delimiter=',', skiprows=1,names=['X', 'Y', 'Z', 'V','VI', 'VP'])
-    #val = pd.read_csv(VAL, delimiter=',', skiprows=1,names=['X', 'Y', 'Z', 'V','VI', 'VP'])
-    #print(res.head(10))
+    # Train for X epochs before saving models
     NPreTrain = 1
 
     try:
@@ -96,6 +97,7 @@ def main():
     except:
         pass
 
+    # Set the batch to something that gives a good processor utilisation
     BATCH_SIZE = 4096
 
     try:

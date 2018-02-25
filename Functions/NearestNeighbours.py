@@ -7,17 +7,44 @@ def getAverageFromNeighbours(data,point,velocity, kNearest=3):
     """
     x,y,z = point
 
-    sp.KDTree(data)
+    tree = sp.KDTree(data)
 
-    _, neighbours = sp.query([[x,y,z]], k=kNearest) # 3 Neighbours
+    dist, neighbours = tree.query([[x,y,z]], k=kNearest) # 3 Neighbours
 
     totalVel = 0
-    for i in neighbours:
-        totalVel += velocity[i]
+    usedVels = 0
+
+    #for i in neighbours:
+    for i in range(0, neighbours.shape[1]):
+        if(dist[0][i] != 0):
+            totalVel += velocity[neighbours[0][i]]
+            usedVels += 1
     
-    return (totalVel / kNearest)
+    return (totalVel / usedVels)
 
     
+def getAverageFromNeighboursFromTree(data,point,velocity, tree, kNearest=3):
+    """
+    Data is a array_like
+    x,y,z is the point to predict
+    """
+    x,y,z = point
+
+    dist, neighbours = tree.query([[x,y,z]], k=kNearest) # 3 Neighbours
+
+    totalVel = 0
+    usedVels = 0
+
+    #for i in neighbours:
+    for i in range(0, neighbours.shape[1]):
+        if(dist[0][i] != 0):
+            totalVel += velocity[neighbours[0][i]]
+            usedVels += 1
+    
+    #print("Summed to " + str(totalVel))
+    #print("Divisor of " + str(usedVels))
+    #print("Returning " + str(totalVel / usedVels))
+    return (totalVel / usedVels)
     
 
 
